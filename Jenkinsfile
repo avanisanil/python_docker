@@ -2,30 +2,25 @@ pipeline {
     agent any
 
     stages {
-
-        stage('Clone') {
+        stage('Build Docker Image') {
             steps {
-                echo 'Cloning repository'
+                sh 'docker build -t myapp .'
             }
         }
 
-        stage('Build') {
+        stage('Run App') {
             steps {
-                sh 'echo Building application'
+                sh '''
+                docker rm -f mycontainer || true
+                docker run -d -p 80:5000 --name mycontainer myapp
+                '''
             }
         }
+    }
 
-        stage('Test') {
-            steps {
-                sh 'echo Running tests'
-            }
+    post {
+        success {
+            echo 'App Deployed 🚀'
         }
-
-        stage('Deploy') {
-            steps {
-                sh 'echo Deploy stage running'
-            }
-        }
-
     }
 }
