@@ -2,13 +2,13 @@ pipeline {
     agent any
 
     stages {
-        stage('Build Docker Image') {
+        stage('Build Image') {
             steps {
                 sh 'docker build -t myapp .'
             }
         }
 
-        stage('Run App') {
+        stage('Run Container') {
             steps {
                 sh '''
                 docker rm -f mycontainer || true
@@ -20,7 +20,7 @@ pipeline {
 
     post {
         success {
-            echo 'App Deployed 🚀'
+            echo 'App is Live 🚀'
         }
     }
 }
